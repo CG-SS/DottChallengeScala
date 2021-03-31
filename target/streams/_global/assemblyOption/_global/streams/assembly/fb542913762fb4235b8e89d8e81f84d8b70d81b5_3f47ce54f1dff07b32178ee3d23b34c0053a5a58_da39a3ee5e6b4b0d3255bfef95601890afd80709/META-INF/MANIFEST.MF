@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1615043386242
+Bundle-Description: ScalaTest is an open-source test framework for the
+  Java Platform designed to increase your productivity by letting you 
+ write fewer lines of test code that more clearly reveal your intent.
+Bundle-DocURL: http://www.scalatest.org/
+Bundle-ManifestVersion: 2
+Bundle-Name: ScalaTest FeatureSpec
+Bundle-SymbolicName: org.scalatest.featurespec
+Bundle-Vendor: Artima, Inc.
+Bundle-Version: 3.2.6
+Created-By: 1.8.0_282 (GraalVM Community)
+Export-Package: org.scalatest.featurespec;uses:="org.scalactic,org.sca
+ lactic.source,org.scalatest,org.scalatest.compatible,org.scalatest.en
+ ablers,scala,scala.collection.immutable,scala.concurrent,scala.reflec
+ t,scala.runtime";version="3.2.6"
+Implementation-Title: scalatest-featurespec
+Implementation-Vendor: org.scalatest
+Implementation-Vendor-Id: org.scalatest
+Implementation-Version: 3.2.6
+Import-Package: org.scalatest;version="[3.2,4)",org.scalatest.compatib
+ le,org.scalatest.enablers;version="[3.2,4)",org.scalatest.exceptions;
+ version="[3.2,4)",org.scalatest.fixture;version="[3.2,4)",org.scalact
+ ic;resolution:=optional,org.scalactic.source;resolution:=optional,sca
+ la;resolution:=optional;version="[2.13,3)",scala.collection.immutable
+ ;resolution:=optional;version="[2.13,3)",scala.concurrent;resolution:
+ =optional;version="[2.13,3)",scala.reflect;resolution:=optional;versi
+ on="[2.13,3)",scala.runtime;resolution:=optional;version="[2.13,3)"
+Private-Package: org.scalatest.featurespec.*
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Specification-Title: scalatest-featurespec
+Specification-Vendor: org.scalatest
+Specification-Version: 3.2.6
+Tool: Bnd-5.1.2.202007211702
+

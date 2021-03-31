@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: scalatest-mustmatchers
+Implementation-Version: 3.2.6
+Specification-Vendor: org.scalatest
+Specification-Title: scalatest-mustmatchers
+Implementation-Vendor-Id: org.scalatest
+Specification-Version: 3.2.6
+Implementation-Vendor: org.scalatest
+

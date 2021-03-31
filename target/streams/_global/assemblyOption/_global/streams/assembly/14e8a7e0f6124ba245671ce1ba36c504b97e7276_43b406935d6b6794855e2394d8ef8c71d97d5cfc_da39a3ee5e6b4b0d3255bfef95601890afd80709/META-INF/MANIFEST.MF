@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1615043005742
+Bundle-Description: ScalaTest is an open-source test framework for the
+  Java Platform designed to increase your productivity by letting you 
+ write fewer lines of test code that more clearly reveal your intent.
+Bundle-DocURL: http://www.scalatest.org/
+Bundle-ManifestVersion: 2
+Bundle-Name: ScalaTest Compatible
+Bundle-SymbolicName: org.scalatest.compatible
+Bundle-Vendor: Artima, Inc.
+Bundle-Version: 3.2.6
+Created-By: 1.8.0_282 (GraalVM Community)
+Export-Package: org.scalatest.compatible;version="3.2.6"
+Implementation-Title: scalatest-compatible
+Implementation-Vendor: org.scalatest
+Implementation-Vendor-Id: org.scalatest
+Implementation-Version: 3.2.6
+Private-Package: org.scalatest.compatible.*
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Specification-Title: scalatest-compatible
+Specification-Vendor: org.scalatest
+Specification-Version: 3.2.6
+Tool: Bnd-5.1.2.202007211702
+

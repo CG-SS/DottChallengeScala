@@ -1,0 +1,20 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(assembly, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: assembly[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/cgss/IdeaProjects/DottChallengeScala/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mdone compiling[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mArgsParserTest:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- ArgsParser.apply wrong args[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- ArgsParser.apply valid args[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- ArgsParser.apply valid args with intervals[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mMainTest:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Main.processOrder 1 2 3 4 order[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 147 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 4[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 2, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0mStrategy 'discard' was applied to a file (Run the task at debug level to see details)[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 3 s, completed 30 de mar de 2021 23:36:52[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(idea-shell, None, None)[0m
