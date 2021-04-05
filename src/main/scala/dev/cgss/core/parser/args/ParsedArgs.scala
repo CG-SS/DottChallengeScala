@@ -1,4 +1,4 @@
-package dev.cgss.parser
+package dev.cgss.core.parser.args
 
 import dev.cgss.date.{DateParser, DateRange}
 

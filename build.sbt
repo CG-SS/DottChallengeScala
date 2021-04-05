@@ -2,11 +2,10 @@ name := "DottChallengeScala"
 version := "0.1"
 scalaVersion := "2.13.5"
 
-val scalaTestVer = "3.2.6"
-val scalaParallelVer = "1.0.2"
+val akkaVer = "2.6.13"
+val logbackVer = "1.2.3"
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % scalaTestVer,
-  "org.scalatest" %% "scalatest" % scalaTestVer % Test,
-  "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelVer
+  "com.typesafe.akka" %% "akka-actor-typed" % akkaVer,
+  "ch.qos.logback" % "logback-classic" % logbackVer
 )

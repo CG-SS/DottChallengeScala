@@ -1,48 +1,28 @@
 package dev.cgss
 
-import dev.cgss.date.DateRange
-import dev.cgss.generator.OrderGenerator
-import dev.cgss.order.Order
-import dev.cgss.parser.{ArgsParser, ParsedArgs}
+import akka.actor.typed.scaladsl.AskPattern.{Askable, schedulerFromActorSystem}
+import akka.actor.typed.{ActorRef, ActorSystem}
+import akka.util.Timeout
+import dev.cgss.core.OrderParserSystem
 
-import scala.collection.parallel.CollectionConverters.ImmutableIterableIsParallelizable
-import scala.collection.parallel.ParIterable
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.DurationInt
+import scala.util.Failure
 
 object Main extends App {
 
-  ArgsParser(args) match {
-    case Failure(_) => println("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
-    case Success(parsedArgs: ParsedArgs) => start(parsedArgs)
-  }
+  implicit val system = ActorSystem(OrderParserSystem(), "DottChallengeScala")
+  implicit val orderParserSystem: ActorRef[OrderParserSystem.Request] = system
+  implicit val ec = system.executionContext
 
-  def start(parsedArgs: ParsedArgs, orders: Seq[Order] = OrderGenerator()): Unit = {
-    val validOrders = orders.par
-      .filter(order => parsedArgs.orderDateRange contains order.creationDate)
+  implicit val timeout: Timeout = 1.minute
+  val result: Future[OrderParserSystem.Response] = orderParserSystem.ask(ref => OrderParserSystem.ParseArgsRequest(args, ref))
 
-    val parsedIntervals = parsedArgs
-      .intervals
-      .map(dateRange => processOrder(dateRange, validOrders))
-    Future
-      .sequence(parsedIntervals)
-      .onComplete {
-        case Failure(ex) => println(ex)
-        case Success(seq) => seq.foreach(result => println(s"${result._1.source} months: ${result._2}"))
-      }
-  }
-
-  def processOrder(dateRange: DateRange, validOrders: ParIterable[Order]): Future[(DateRange, Int)] = Future {
-    val orderCount = validOrders.count(order => isProductInDateRange(order, dateRange))
-
-    (dateRange, orderCount)
-  }
-
-  private def isProductInDateRange(order: Order, dateRange: DateRange): Boolean = {
-    order
-      .itemList
-      .exists(item => dateRange contains item.product.creationDate)
+  result.onComplete {
+    case Failure(exception) => println(s"Failed ${exception.getMessage}")
+    case util.Success(OrderParserSystem.WrongArgs(_)) => println("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
+    case util.Success(OrderParserSystem.NumberOfOrdersByTimeRange(value)) =>
+      value.foreach(result => println(s"${result._1.source} months: ${result._2}"))
   }
 
 }
