@@ -1,6 +1,6 @@
 package dev.cgss.core
 
-import akka.actor.{Actor, Props, Status}
+import akka.actor.{Actor, ActorLogging, Props, Status}
 import akka.pattern.ask
 import akka.util.Timeout
 import dev.cgss.core.OrderParserSystemActor.{FailureResponse, ParseOrdersByDateRange, ParsedOrdersByDateRange}
@@ -28,11 +28,13 @@ object OrderParserSystemActor {
 
 }
 
-class OrderParserSystemActor extends Actor {
+class OrderParserSystemActor extends Actor with ActorLogging {
   private implicit val defaultTimeout: Timeout = 1.minute
 
   override def receive: Receive = {
     case ParseOrdersByDateRange(args) => {
+
+      log.debug(s"Received ParseOrdersByDateRange with args (${args.mkString(", ")})")
 
       val s = sender()
 
@@ -47,11 +49,16 @@ class OrderParserSystemActor extends Actor {
       waitFor.onComplete {
         case Failure(exception) => s ! Status.Failure(exception)
         case Success(value) => {
+
+          log.debug(s"Sucessfully parsed request")
+
           value._1 match {
             case ArgsParserActor.ParsedArgsResponse(parsedArgs) => value._2 match {
               case OrderLoader.LoadedOrders(orders) => {
                 context.stop(argsParserActor)
                 context.stop(orderLoader)
+
+                log.debug(s"ArgsParser and OrderLoader returned success with ${orders.length} orders")
 
                 val validOrders = orders
                   .filter(order => parsedArgs.orderDateRange contains order.creationDate)

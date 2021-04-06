@@ -1,6 +1,6 @@
 package dev.cgss.core.parser.args
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorLogging}
 import dev.cgss.core.parser.args.ArgsParserActor.{ArgsParseRequest, ArgsParserFailure, ParsedArgsResponse}
 import dev.cgss.date.{DateParser, DateRange}
 
@@ -20,11 +20,17 @@ object ArgsParserActor {
 
 }
 
-class ArgsParserActor extends Actor {
+class ArgsParserActor extends Actor with ActorLogging {
   override def receive: Receive = {
     case ArgsParseRequest(args) => tryParseArgs(args) match {
-      case Failure(_) => sender() ! ArgsParserFailure("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
-      case Success(value) => sender() ! ParsedArgsResponse(value)
+      case Failure(_) => {
+        log.debug("Incorrect args")
+        sender() ! ArgsParserFailure("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
+      }
+      case Success(value) => {
+        log.debug("Successfully parsed args")
+        sender() ! ParsedArgsResponse(value)
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 package dev.cgss.core.parser.order
 
-import akka.actor.{Actor, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 import dev.cgss.core.parser.order.ParseOrderActor.{ProcessedOrder, StartProcess}
 import dev.cgss.date.DateRange
 import dev.cgss.order.Order
@@ -19,11 +19,13 @@ object ParseOrderActor {
 
 }
 
-class ParseOrderActor(private val dateRange: DateRange, private val validOrders: Seq[Order]) extends Actor {
+class ParseOrderActor(private val dateRange: DateRange, private val validOrders: Seq[Order]) extends Actor with ActorLogging {
   override def receive: Receive = {
     case StartProcess => {
+      log.debug("Starting parsing orders")
       val result = processOrder(dateRange, validOrders)
       sender() ! ProcessedOrder(result._1, result._2)
+      log.debug("Finished parsing orders")
       context.stop(self)
     }
   }

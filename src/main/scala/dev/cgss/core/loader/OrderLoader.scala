@@ -1,6 +1,6 @@
 package dev.cgss.core.loader
 
-import akka.actor.{Actor, Status}
+import akka.actor.{Actor, ActorLogging, Status}
 import dev.cgss.core.loader.OrderLoader.{LoadOrders, LoadedOrders}
 import dev.cgss.generator.OrderGenerator
 import dev.cgss.order.Order
@@ -17,8 +17,11 @@ object OrderLoader {
 
 }
 
-class OrderLoader extends Actor {
+class OrderLoader extends Actor with ActorLogging {
   override def receive: Receive = {
-    case LoadOrders => sender() ! LoadedOrders(OrderGenerator())
+    case LoadOrders => {
+      log.debug("Loading orders")
+      sender() ! LoadedOrders(OrderGenerator())
+    }
   }
 }
