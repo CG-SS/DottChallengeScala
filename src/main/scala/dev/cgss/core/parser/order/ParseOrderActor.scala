@@ -1,13 +1,13 @@
 package dev.cgss.core.parser.order
 
 import akka.actor.{Actor, Props}
-import dev.cgss.core.parser.order.ParseOrder.{ProcessedOrder, StartProcess}
+import dev.cgss.core.parser.order.ParseOrderActor.{ProcessedOrder, StartProcess}
 import dev.cgss.date.DateRange
 import dev.cgss.order.Order
 
-object ParseOrder {
+object ParseOrderActor {
 
-  def props(dateRange: DateRange, validOrders: Seq[Order]): Props = Props(new ParseOrder(dateRange, validOrders))
+  def props(dateRange: DateRange, validOrders: Seq[Order]): Props = Props(new ParseOrderActor(dateRange, validOrders))
 
   sealed trait Request
 
@@ -19,7 +19,7 @@ object ParseOrder {
 
 }
 
-class ParseOrder(private val dateRange: DateRange, private val validOrders: Seq[Order]) extends Actor {
+class ParseOrderActor(private val dateRange: DateRange, private val validOrders: Seq[Order]) extends Actor {
   override def receive: Receive = {
     case StartProcess => {
       val result = processOrder(dateRange, validOrders)

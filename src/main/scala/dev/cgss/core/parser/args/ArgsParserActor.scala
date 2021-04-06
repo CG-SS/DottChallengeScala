@@ -1,12 +1,12 @@
 package dev.cgss.core.parser.args
 
 import akka.actor.Actor
-import dev.cgss.core.parser.args.ArgsParser.{ArgsParseRequest, ArgsParserFailure, ParsedArgsResponse}
+import dev.cgss.core.parser.args.ArgsParserActor.{ArgsParseRequest, ArgsParserFailure, ParsedArgsResponse}
 import dev.cgss.date.{DateParser, DateRange}
 
 import scala.util.{Failure, Success, Try}
 
-object ArgsParser {
+object ArgsParserActor {
 
   sealed trait Request
 
@@ -20,7 +20,7 @@ object ArgsParser {
 
 }
 
-class ArgsParser extends Actor {
+class ArgsParserActor extends Actor {
   override def receive: Receive = {
     case ArgsParseRequest(args) => tryParseArgs(args) match {
       case Failure(_) => sender() ! ArgsParserFailure("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
