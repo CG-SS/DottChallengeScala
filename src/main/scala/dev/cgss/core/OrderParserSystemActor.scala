@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, Props, Status}
 import akka.pattern.ask
 import akka.util.Timeout
 import dev.cgss.core.OrderParserSystemActor.{FailureResponse, ParseOrdersByDateRange, ParsedOrdersByDateRange}
-import dev.cgss.core.loader.OrderLoader
+import dev.cgss.core.loader.OrderLoaderActor
 import dev.cgss.core.parser.args.ArgsParserActor
 import dev.cgss.core.parser.order.ParseOrderActor
 import dev.cgss.date.DateRange
@@ -39,11 +39,11 @@ class OrderParserSystemActor extends Actor with ActorLogging {
       val s = sender()
 
       val argsParserActor = context.actorOf(Props[ArgsParserActor])
-      val orderLoader = context.actorOf(Props[OrderLoader])
+      val orderLoader = context.actorOf(Props[OrderLoaderActor])
 
       val waitFor = for {
         parsedArgsResponse <- (argsParserActor ? ArgsParserActor.ArgsParseRequest(args)).mapTo[ArgsParserActor.Response]
-        ordersResponse <- (orderLoader ? OrderLoader.LoadOrders).mapTo[OrderLoader.Response]
+        ordersResponse <- (orderLoader ? OrderLoaderActor.LoadOrders).mapTo[OrderLoaderActor.Response]
       } yield (parsedArgsResponse, ordersResponse)
 
       waitFor.onComplete {
@@ -54,7 +54,7 @@ class OrderParserSystemActor extends Actor with ActorLogging {
 
           value._1 match {
             case ArgsParserActor.ParsedArgsResponse(parsedArgs) => value._2 match {
-              case OrderLoader.LoadedOrders(orders) => {
+              case OrderLoaderActor.LoadedOrders(orders) => {
                 context.stop(argsParserActor)
                 context.stop(orderLoader)
 
