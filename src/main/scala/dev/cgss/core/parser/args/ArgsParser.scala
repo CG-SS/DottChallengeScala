@@ -1,23 +1,30 @@
 package dev.cgss.core.parser.args
 
-import akka.actor.typed.ActorRef
-import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.Actor
+import dev.cgss.core.parser.args.ArgsParser.{ArgsParseRequest, ArgsParserFailure, ParsedArgsResponse}
 import dev.cgss.date.{DateParser, DateRange}
 
 import scala.util.{Failure, Success, Try}
 
 object ArgsParser {
 
-  def apply(): Behaviors.Receive[Request] = {
-    Behaviors.receiveMessage[Request] {
-      case ParseArgsRequest(args, actorRef) =>
+  sealed trait Request
 
-        tryParseArgs(args) match {
-          case Failure(ex) => actorRef ! WrongArgsResponse(ex.getMessage)
-          case Success(value) => actorRef ! ParsedArgsResponse(value)
-        }
+  sealed trait Response
 
-        Behaviors.stopped
+  final case class ArgsParseRequest(args: Array[String]) extends Request
+
+  final case class ParsedArgsResponse(parsedArgs: ParsedArgs) extends Response
+
+  final case class ArgsParserFailure(ex: String) extends Response
+
+}
+
+class ArgsParser extends Actor {
+  override def receive: Receive = {
+    case ArgsParseRequest(args) => tryParseArgs(args) match {
+      case Failure(_) => sender() ! ArgsParserFailure("Usage: <begin date yyyy-MM-dd hh:mm:ss> <end date yyyy-MM-dd hh:mm:ss> <optional intervals>")
+      case Success(value) => sender() ! ParsedArgsResponse(value)
     }
   }
 
@@ -45,16 +52,5 @@ object ArgsParser {
       }
     }
   }
-
-  sealed trait Request
-
-  sealed trait Response
-
-  final case class ParseArgsRequest(args: Array[String], actorRef: ActorRef[Response]) extends Request
-
-  final case class ParsedArgsResponse(parseArgs: ParsedArgs) extends Response
-
-  final case class WrongArgsResponse(ex: String) extends Response
-
 }
 
